@@ -1,24 +1,17 @@
 # atexo-app
 
-## Project setup
+## Installation
+
+Clone the project and navigate to the project folder
+`cd atexo-app;`
+
+Run
+
 ```
-npm install
+npm install;
+npm run serve;
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Make sure atexo-api is running.
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Update .env.development.local accordingly
