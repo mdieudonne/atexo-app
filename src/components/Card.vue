@@ -1,15 +1,15 @@
 <template>
   <div class="Card">
     <div class="Suit">
-      <component :is="getSuit" style="height: 30px;" />
-      <component :is="getSuit" style="height: 30px;" />
+      <component :is="getSuit" />
+      <component :is="getSuit" />
     </div>
     <div class="Face">
-      {{ getFace }}
+        {{ getFace }}
     </div>
     <div class="Suit">
-      <component :is="getSuit" style="height: 30px;" />
-      <component :is="getSuit" style="height: 30px;" />
+      <component :is="getSuit" />
+      <component :is="getSuit" />
     </div>
   </div>
 </template>
@@ -56,15 +56,15 @@ export default {
 }
 
 .Card .Face {
-  font-size: 36px;
-  height: 80%;
+  font-size: 48px;
   display: flex;
-  align-content: center;
+  flex-grow: 1;
+  align-items: center;
   justify-content: center;
 }
 
 .Card .Suit {
-  font-size: 36px;
+  height: 28px;
   vertical-align: middle;
   display: flex;
   justify-content: space-between;

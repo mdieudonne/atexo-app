@@ -4,15 +4,20 @@
       {{ errorMessage }}
     </div>
     <div class="Commands">
-      <input v-model="cardsNumber" placeholder="Nombre de cartes">
+
+      <input v-model="cardsNumber" type="text" placeholder="Nombre de cartes">
       <button v-if="!clearable" @click="onClickSubmit">Recevoir une main</button>
       <button v-else @click="onClickClear">Rendre les cartes</button>
-      <button @click="onClickSort" v-if="hand.length > 0">Trier la main</button>
+      <button v-if="hand.length > 0" @click="onClickSort">Trier la main</button>
+      <div>
+        <input id="checkbox1" v-model="corrupt" type="checkbox"/>
+        <label aria-describedby="label" for="checkbox1" style="padding-right: 12px">Corrompre la requête<br/>(to trigger Alert from API response)</label>
+      </div>
     </div>
 
-    <transition-group name="cardgame" tag="div" class="Cards">
+    <transition-group class="Cards" name="cardgame" tag="div">
       <template v-for="card of hand">
-        <card :key="card" :card="card" />
+        <card :key="card" :card="card"/>
       </template>
     </transition-group>
   </div>
@@ -29,6 +34,7 @@ export default {
     cardsNumber: 10,
     errorMessage: '',
     clearable: false,
+    corrupt: false,
   }),
   components: {
     Card
@@ -44,12 +50,14 @@ export default {
     async onClickSubmit() {
       try {
         this.clearError()
+        const params = {}
+        if (!this.corrupt) {
+          params.count = this.cardsNumber
+        }
         const response = await axios({
           method: 'GET',
           url: 'cards',
-          params: {
-            count: this.cardsNumber,
-          }
+          params
         })
         this.hand = response.data
         this.clearable = true
@@ -60,6 +68,12 @@ export default {
     async onClickSort() {
       try {
         this.clearError()
+        const params = {
+          hand: this.hand,
+        }
+        if (this.corrupt) {
+          params.hand.push('11 Toronto')
+        }
         const response = await axios({
           method: 'GET',
           url: 'cards/sort',
@@ -84,7 +98,7 @@ export default {
 }
 </script>
 
-<style scoped lang="css">
+<style lang="css" scoped>
 
 .Container {
   display: flex;
@@ -103,7 +117,7 @@ export default {
   padding-bottom: 24px;
 }
 
-.Commands input {
+.Commands input[type="text"] {
   width: 200px;
   padding: 12px 20px;
   margin: 8px 0;
@@ -129,7 +143,8 @@ export default {
 }
 
 .cardgame-enter, .cardgame-leave-to
-  /* .list-complete-leave-active below version 2.1.8 */ {
+  /* .list-complete-leave-active below version 2.1.8 */
+{
   opacity: 0;
   transform: translateY(30px);
 }
